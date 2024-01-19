@@ -156,7 +156,7 @@ File telemetryFile;
 
 const char* filename = "telemetry.txt"
 
-char* telemetryBuffer = 
+char telemetryBuffer[100]; 
 
 
 ///////////////////////////////////////////
@@ -334,10 +334,122 @@ void setup()
   Serial.begin(9600);
   Wire2.begin(); //second bus for IMU
   Wire.begin();
-  delay(2000);
+  delay(1000);
+
+  //initializes sensors
+  sensorsInit();
+  
+  //set up sensors and system
+  // Call acceleromter thread
+  baroThr = threads.addThread(baroThread);
+
+  // call PID settings
+  // courseCorrection.SetMode(AUTOMATIC); todo in version 2
+  // pathCorrection.SetMode(MANUAL);
+  state = ASCEND_STATE;
+
+  //set up servo 
+  servo.setServoControl(SERVO_PIN);
+  servo.setKp(1.0);
+  telemetryFile = SD.open("test.txt", FILE_WRITE);
+}
+
+void loop()
+{
+
+  // call measurements
+  long testT = millis();
+
+  accelThread();
+  // gnssThread();
+
+  Serial.print("gnss time: ");
+  Serial.println(millis() - testT);
+  testT = millis();
 
 
 
+  Serial.print("baro time: ");
+  Serial.println(millis() - testT);
+
+  testT = millis();
+  if(TEST)
+  {
+    
+    printData();
+    // Serial.print("cmpt and out time: ");
+    // Serial.println(millis() - testT);
+    // servo.rotate((int)(steeringOutput), 4);
+    // Serial.print("Servo Angle: ");
+    // Serial.println(servo.Angle());
+
+    ////////////////////////////
+    
+    // ////////////////////////////
+
+    // ////////////////////////////
+    // Serial.print("Baro Altitude (m): ");
+    // Serial.println(altitude);
+    // Serial.print("Baro Temperature (deg C): ");
+    // Serial.println(temperature_baro);
+    // Serial.print("Vertical speed (m/s): ");
+    // Serial.println(vspeed);
+    ////////////////////////////
+
+    // plot drawing ---------------------
+    //  nextPointHeading = setCourse2Points(finLat, finLong);
+    //  Serial.print(nextPointHeading);
+    //  Serial.print(",");
+    //  pidDeltaAngle();
+    //  Serial.print(pidInput);
+    //  Serial.print(",");
+    //  courseCorrection.Compute();
+    //  Serial.print(steeringOutput);
+    //  Serial.print(",");
+    //  Serial.println();
+  }
+
+  // //   // https://paulbourke.net/geometry/transformationprojection/#:~:text=Updated%20December%201999-,Stereographic,paper%20or%20a%20computer%20display.
+}
+
+void printData()
+{
+  //gnss data
+  Serial.println(fallDetected);
+  Serial.print("Latitude: ");
+  Serial.println(latitude, 7);
+  Serial.print("Longitude: ");
+  Serial.println(longitude, 7);
+  Serial.print("GroundSpeed: ");
+  Serial.println(groundSpeed);
+  Serial.print("GNSS heading: ")
+  Serial.println();
+  
+  // orientation 
+  Serial.print("Roll (deg): ");
+  Serial.println(roll);
+  Serial.print("Pitch (deg): ");
+  Serial.println(pitch);
+  Serial.print("Yaw (deg): ");
+  Serial.println(heading);
+
+  //computations 
+  Serial.print("Course to final: ");
+  nextPointHeading = setCourse2Points(finLat, finLong);
+  Serial.println(nextPointHeading);
+  Serial.print("DistanceToFinal: ");
+  Serial.println(distance2Points(latitude, longitude, finLat, finLong));
+  pidDeltaAngle();
+  Serial.print("Delta angle: ");
+  Serial.println(pidInput);
+  courseCorrection.Compute();
+  Serial.print("PID output: ");
+  Serial.println(steeringOutput);
+  
+}
+
+void sensorsInit()
+{
   pinMode(BUZZER_PIN, OUTPUT);
   // set the setting for IMU module
   MPU9250Setting setting;
@@ -396,95 +508,4 @@ void setup()
     }
   }
 
-  // Call acceleromter thread
-  baroThr = threads.addThread(baroThread);
-
-  // call PID settings
-  // courseCorrection.SetMode(AUTOMATIC); todo in version 2
-  // pathCorrection.SetMode(MANUAL);
-  state = ASCEND_STATE;
-
-  //set up servo 
-  servo.setServoControl(SERVO_PIN);
-  servo.setKp(1.0);
-}
-
-void loop()
-{
-
-  // call measurements
-  long testT = millis();
-
-  accelThread();
-  // gnssThread();
-
-  Serial.print("gnss time: ");
-  Serial.println(millis() - testT);
-  testT = millis();
-
-
-
-  Serial.print("baro time: ");
-  Serial.println(millis() - testT);
-
-  testT = millis();
-  if(TEST)
-  {
-    Serial.println(fallDetected);
-    Serial.print("Latitude: ");
-    Serial.println(latitude, 7);
-    Serial.print("Longitude: ");
-    Serial.println(longitude, 7);
-    Serial.print("GroundSpeed: ");
-    Serial.println(groundSpeed);
-    Serial.print("Course to final: ");
-    nextPointHeading = setCourse2Points(finLat, finLong);
-    Serial.println(nextPointHeading);
-    Serial.print("DistanceToFinal: ");
-    Serial.println(distance2Points(latitude, longitude, finLat, finLong));
-    pidDeltaAngle();
-    Serial.print("Delta angle: ");
-    Serial.println(pidInput);
-    courseCorrection.Compute();
-    Serial.print("PID output: ");
-    Serial.println(steeringOutput);
-
-    // Serial.print("cmpt and out time: ");
-    // Serial.println(millis() - testT);
-    // servo.rotate((int)(steeringOutput), 4);
-    // Serial.print("Servo Angle: ");
-    // Serial.println(servo.Angle());
-
-    ////////////////////////////
-    Serial.print("Roll (deg): ");
-    Serial.println(roll);
-    Serial.print("Pitch (deg): ");
-    Serial.println(pitch);
-    Serial.print("Yaw (deg): ");
-    Serial.println(heading);
-    // ////////////////////////////
-
-    // ////////////////////////////
-    // Serial.print("Baro Altitude (m): ");
-    // Serial.println(altitude);
-    // Serial.print("Baro Temperature (deg C): ");
-    // Serial.println(temperature_baro);
-    // Serial.print("Vertical speed (m/s): ");
-    // Serial.println(vspeed);
-    ////////////////////////////
-
-    // plot drawing ---------------------
-    //  nextPointHeading = setCourse2Points(finLat, finLong);
-    //  Serial.print(nextPointHeading);
-    //  Serial.print(",");
-    //  pidDeltaAngle();
-    //  Serial.print(pidInput);
-    //  Serial.print(",");
-    //  courseCorrection.Compute();
-    //  Serial.print(steeringOutput);
-    //  Serial.print(",");
-    //  Serial.println();
-  }
-
-  // //   // https://paulbourke.net/geometry/transformationprojection/#:~:text=Updated%20December%201999-,Stereographic,paper%20or%20a%20computer%20display.
 }
