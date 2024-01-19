@@ -17,5 +17,8 @@ Features:
 > ![GNSS antenna - Taoglas ADFGP.50A.07](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/ADFGP.50A.07.0100C_01-1000x1000.png?raw=true )
 > ![GNSS breakout board - Ublox neo m9n](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/gps-15005_SPL.jpg?raw=true )
 
+## Schematics
+> ![Schematics including MCU, IMU, GNSS and MPL](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/image.png?raw=true )
+
 
 
