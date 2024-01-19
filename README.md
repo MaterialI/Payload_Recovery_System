@@ -14,7 +14,7 @@ Features:
 > Performs recording of the data received from sensors. Stores it in a CSV (Comma Separated Value) format.
 
 ## Sensor Suite
-![Microcontroller Unit - Teency 4.1](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/teensy-4.1-cover.jpeg?raw=true "Microcontroller unit")
-![IMU - MPU 9250 Breakout board](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg?raw=true "Microcontroller unit")
+> ![Microcontroller Unit - Teency 4.1](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/teensy-4.1-cover.jpeg?raw=true "Microcontroller unit")
+> ![IMU - MPU 9250 Breakout board](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg?raw=true "Microcontroller unit")
 
 
