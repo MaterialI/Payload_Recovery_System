@@ -1,4 +1,4 @@
-﻿# SFU_Rocketry_Recovery_System
+# Payload_Recovery_System
 ## The rev 1.0  
 Features: 
 ### Path construction 
@@ -16,4 +16,4 @@ Features:
 ## Sensor Suite
 ![alt text](/SFU_Rocketry_Recovery_System/edit/main/internalGS/teensy-4.1-cover.jpeg?raw=true "Microcontroller unit")
 
-# Payload_Recovery_System
+
