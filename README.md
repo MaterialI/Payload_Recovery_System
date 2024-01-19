@@ -16,5 +16,6 @@ Features:
 ## Sensor Suite
 > ![Microcontroller Unit - Teency 4.1](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/teensy-4.1-cover.jpeg?raw=true "Microcontroller unit")
 > ![IMU - MPU 9250 Breakout board](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg?raw=true "Microcontroller unit")
+> ![Barometer - MPL115a2](https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/1893-02.jpg?raw=true "Microcontroller unit")
 
 
