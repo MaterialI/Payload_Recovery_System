@@ -1,0 +1,12 @@
+Todo: finish the state machine, adapt for the release. 
+SD card fix
+Add beep and test solution (removed xte correction and track following)
+
+Testing: simple steering. 
+
+
+Space: wide open; Field or smth. Could do 100 metres? Depends on the flight time. How big is the space? Can be any wide open space? The only problem. 
+To find out: - hang time
+- a good space with no much trees (possibly Coquitlam, or other fields possibly 200x200m or more)
+- time for the parachute to deploy
+- Testing: altitude, deistance, conditions (pid coefficients) 

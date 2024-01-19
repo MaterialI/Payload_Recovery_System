@@ -1,0 +1,22 @@
+﻿  LineGenerationAlgorithm.cpp
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(13,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(14,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(15,45): warning C4305: '*=': truncation from 'double' to 'float'
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(16,45): warning C4305: '*=': truncation from 'double' to 'float'
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(37,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(40,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(41,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(42,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(43,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(44,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(53,1): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(56,27): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(58,38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(59,38): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(71,45): warning C4305: '/=': truncation from 'double' to 'float'
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(72,45): warning C4305: '/=': truncation from 'double' to 'float'
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(73,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(74,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(87,47): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\LineGenerationAlgorithm.cpp(88,47): warning C4305: 'initializing': truncation from 'double' to 'float'
+  LineGenerationAlgorithm.vcxproj -> D:\RocketrySFU\Payload Recovery\Software\LineGenerationAlgorithm\Debug\LineGenerationAlgorithm.exe
