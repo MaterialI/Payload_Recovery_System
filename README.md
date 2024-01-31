@@ -2,7 +2,8 @@
 ## The rev 1.0  
 Features: 
 ### Course correction 
-> Uses PID and course error to make the steering input and correct the heading. May utilze both true heading and movement heading to calculate vector and magnitude of wind. Useful for 
+> Uses PID and course error to make the steering input and correct the heading. May utilze both true heading and movement heading to calculate vector and magnitude of wind. Useful for sensor fusion task and dead reckoning algorithm.
+> Version 2 will include more sophisticated approach to sensor fusion and system control, aswell failure protection through dead reckoning and intelligent landing system.
 ### State Machine 
 > Allows the system to recognize the in which stage of the flight it is and does the necessary actions.
 > There are four states <ol>  <li> Ascend </li> <li>Descend </li> <li>Landing </li> <li>On the ground </li> </ol>
