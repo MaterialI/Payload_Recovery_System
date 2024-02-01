@@ -72,6 +72,7 @@ void loop() {
     }
     
     dtostrf(roll, 4, 3, data);
+    dtostrf(0.0, 3,3,data);
     Serial.println(data);
     Serial.println(roll);
 
