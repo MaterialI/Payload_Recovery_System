@@ -13,11 +13,11 @@ Features:
 
 ## Sensor Suite
 <img src = "https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/teensy-4.1-cover.jpeg" width = 400>
-<img src = "https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg" width = 400>
-<img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/1893-02.jpg" width=400>
-<img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/900-00360_SPL.jpg" width=400>
-<img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/ADFGP.50A.07.0100C_01-1000x1000.png" width=400>
-<img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/gps-15005_SPL.jpg" width=400>
+<img src = "https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg" width = 400>
+<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/tree/main/Photos/1893-02.jpg" width=400>
+<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/tree/main/Photos/900-00360_SPL.jpg" width=400>
+<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/tree/main/Photos/ADFGP.50A.07.0100C_01-1000x1000.png" width=400>
+<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/tree/main/Photos/gps-15005_SPL.jpg" width=400>
 
 
 ## Schematics
