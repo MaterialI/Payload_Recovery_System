@@ -12,8 +12,8 @@ Features:
 > Performs recording of the data received from sensors. Stores it in a CSV (Comma Separated Value) format.
 
 ## Sensor Suite
-<img src = "https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/teensy-4.1-cover.jpeg?raw=true" width = 400)
-<img src = "https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg?raw=true" width = 400)
+<img src = "https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/teensy-4.1-cover.jpeg?raw=true" width = 400>
+<img src = "https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/13762-01a.jpg?raw=true" width = 400>
 <img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/1893-02.jpg?raw=true" width="400">
 <img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/900-00360_SPL.jpg?raw=true" width="400">
 <img src="https://github.com/MaterialI/Payload_Recovery_System/tree/main/Photos/ADFGP.50A.07.0100C_01-1000x1000.png?raw=true" width="400">
