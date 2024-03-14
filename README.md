@@ -12,12 +12,23 @@ Features:
 > Performs recording of the data received from sensors. Stores it in a CSV (Comma Separated Value) format.
 
 ## Sensor Suite
-<img src = "https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/teensy-4.1-cover.jpeg" width = 400>
-<img src = "https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/13762-01a.jpg" width = 400>
-<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/1893-02.jpg" width=400>
-<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/gps-15005_SPL.jpg" width=400>
-<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/ADFGP.50A.07.0100C_01-1000x1000.png" width=400>
-<img src="https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/900-00360_SPL.jpg" width=400>
+![Teensy 4.1](https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/teensy-4.1-cover.jpeg) 
+Width: 400
+
+![IMU - MPU 9250](https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/13762-01a.jpg) 
+Width: 400
+
+![Barometer - MPL115a2](https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/1893-02.jpg) 
+Width: 400
+
+![GNSS breakout board - Ublox neo m9n](https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/gps-15005_SPL.jpg) 
+Width: 400
+
+![GNSS antenna - Taoglas ADFGP.50A.07](https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/ADFGP.50A.07.0100C_01-1000x1000.png) 
+Width: 400
+
+![Servo - Parallax 360 continuous servo](https://raw.githubusercontent.com/MaterialI/Payload_Recovery_System/main/Photos/900-00360_SPL.jpg) 
+Width: 400
 
 
 ## Schematics
