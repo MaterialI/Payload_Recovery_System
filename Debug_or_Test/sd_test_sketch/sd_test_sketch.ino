@@ -1,15 +1,18 @@
 #include <SPI.h>
 #include <SD.h>
 #include <MPU9250.h> 
-#include <Wire.h>    
+#include <Wire.h>  
+#include <string.h>
 const int chipSelect = BUILTIN_SDCARD;
 File myFile;
-const char *filename = "test.txt";
+String filename = "test";
+String timestamp = "6969";
+String fileExtension = ".txt";
 long long count = 0;
 float roll = 0.0;
 float pitch;
 float yaw;
-
+String name;
 MPU9250 mpu; 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -53,14 +56,21 @@ void setup() {
   {
     Serial.println("Unable to detect Accelerometer module!");
   }
+  name = (filename + timestamp + fileExtension);
 
-
-  myFile = SD.open("test.txt", FILE_WRITE);
-
+  myFile = SD.open(name.c_str(), FILE_WRITE);
+  myFile.println("VAmooos");
+  myFile.write("VAmooos write");
 
 }
 
+int iter = 0;
 void loop() {
+  iter++;
+  if(iter > 100)
+  {
+    myFile.close();
+  }
   // nothing happens after setup
   //do sensor recording and write datafile
   char data[20];
@@ -72,8 +82,8 @@ void loop() {
     }
     
     dtostrf(roll, 4, 3, data);
-    dtostrf(0.0, 3,3,data);
+    
     Serial.println(data);
-    Serial.println(roll);
+    myFile.println(roll);
 
 }

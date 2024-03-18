@@ -17,6 +17,7 @@
 #include <SPI.h>  //spi library
 #include <SD.h>   //sd card
 #include <FeedBackServo.h>
+#include <string.h>
 // to store the datapoints of the path we use an array of pairs which belong to orthdrome path on sphere (lon, lat)
 // between the points we use approximation to loxodrome path (heading is the same throughout the whole path)
 
@@ -25,9 +26,11 @@
 #define BOOTUP_STATE 0
 #define ASCEND_STATE 1
 #define DESCEND_STATE 2
-#define LANDING_STATE 3
+#define LANDED_STATE 3
 
-bool TEST = true; // to ignore GNSS module presence check and turn on serial print
+bool onMute = false;         // to mute the sound of the buzzer
+bool isServoPresent = true; // to check whether the servo is present, if not, the system will not try to control it.
+bool TEST = false;           // to ignore GNSS module presence check and turn on serial print
 
 // communication pins/ i2c adresses.
 #define FEEDBACK_PIN 7
@@ -42,7 +45,9 @@ MPU9250 mpu;                                       // gyro, accel, compass
 FeedBackServo servo = FeedBackServo(FEEDBACK_PIN); /////Servo
 
 short state = BOOTUP_STATE; // initial state
-bool fallDetected = false;
+
+bool fallDetected = false;    // transition from ascend to descend state
+bool impactDetected = false;  // transition from descend to landing state
 bool descendDetected = false; // todo implement the 2 step verification of fall. Based on the measurements of opening.
 
 bool sensorsVerified = true; // assume that all sensors are working and responding, if not, the system will not exit from bootup state.
@@ -97,8 +102,8 @@ float gnssVspeed = 0.0;
 // PathConstruction--------------------------
 
 // final locations to be preprogrammed
-float finLat = 49.1951;
-float finLong = -123.1788;
+float finLat = 49.221709;
+float finLong = -122.570824;
 
 // PID ----- ///////////////////////////////
 
@@ -118,9 +123,10 @@ PID courseCorrection(&pidInput, &steeringOutput, &allowedGoalRot, cP, cI, cD, DI
 
 // Telemetry recording
 File telemetryFile;
-String fileName = "telemetry"; // timestamp will be added upon setup.
+String fileName = "t"; // timestamp will be added upon setup.
 String timestamp = "";
-String fileExtension = ".csv";
+String fileExtension = ".txt";
+String name = "";
 char telemetryBuffer[100];
 
 // timings
@@ -209,6 +215,10 @@ int accelThread() // the function is being called by main loop
       if (state == ASCEND_STATE)
       {
         fallDetected = detectFall();
+      }
+      if (state == DESCEND_STATE)
+      {
+        impactDetected = detectImpact();
       }
       return 1;
     }
@@ -316,16 +326,24 @@ void sdWrite()
   telemetryFile.print(",");
   telemetryFile.print(baroTemperature);
   telemetryFile.print(",");
+  telemetryFile.print(vspeed);
+  telemetryFile.print(",");
+  telemetryFile.print(steeringOutput);
+  telemetryFile.print(",");
+  telemetryFile.print(pidInput);
+  telemetryFile.print(",");
+  telemetryFile.print(state);
+  telemetryFile.print(",");
   telemetryFile.println();
 }
 
 // takes in a steering input and range of steering coefficient
-void controlServo(double steeringInput, double coefficient = 1.0)
+void controlServo(double steeringInput, double coefficient = 2.5)
 {
-
-  servo.rotate((int)(steeringInput * coefficient), 4); // rotate by input (allowed threshold of rotation is 4 degrees)
-  if (TEST)
-    Serial.print("Servo Angle: "); // debug to check servo angle
+  if (isServoPresent)
+  {
+    servo.rotate((int)(steeringInput * coefficient), 4); // rotate by input (allowed threshold of rotation is 4 degrees)
+  }
   // todo write down the true rotation angle of servo
 }
 
@@ -351,19 +369,6 @@ void printData()
   Serial.println(pitch);
   Serial.print("Yaw (deg): ");
   Serial.println(heading);
-
-  // computations
-  Serial.print("Course to final: ");
-  nextPointHeading = setCourse2Points(finLat, finLong);
-  Serial.println(nextPointHeading);
-  Serial.print("DistanceToFinal: ");
-  Serial.println(distance2Points(finLat, finLong));
-  pidDeltaAngle();
-  Serial.print("Delta angle: ");
-  Serial.println(pidInput);
-  courseCorrection.Compute();
-  Serial.print("PID output: ");
-  Serial.println(steeringOutput);
 
   // altitude/ vertical speed
   Serial.print("Baro Altitude (m): ");
@@ -418,12 +423,24 @@ void stateAction() // todo finish the state machine, develop descend state machi
   case DESCEND_STATE:
   {
     // data recording is still running, and system takes actions through steering and estimating the landing in position
-    // if servo will be stalling, change the servo to separate thread, which will be run with special frequency
+    // if servo will be stalling, change the servo to separate thread, which will be run with special frequenc
+    descendToLanding();
     performCalculations();
     controlServo(steeringOutput, rangeCoefficient);
     sdWrite();
     if (TEST)
       printData();
+  }
+  break;
+  case LANDED_STATE:
+  {
+    // the system is landed, the data is still being recorded, the system is not taking any actions.
+    // the system is waiting for the user to turn off the system.
+    if (TEST)
+      Serial.println("The system has landed, turn off the system.");
+    telemetryFile.close();
+    while (1)
+      ;
   }
   break;
   };
@@ -437,6 +454,8 @@ void bootupToAscend()
   if (sensorsVerified && state == BOOTUP_STATE)
   {
     state = ASCEND_STATE;
+    if (TEST)
+      Serial.println("The system has finished its bootup sequence, the sensors are connected.");
   }
 }
 
@@ -446,6 +465,19 @@ void ascendToDescend()
   if (fallDetected && state == ASCEND_STATE)
   {
     state = DESCEND_STATE;
+    delay(500);
+    if (TEST)
+      Serial.println("The system has detected the fall, the system is descending.");
+  }
+}
+
+void descendToLanding()
+{
+  if (impactDetected && state == DESCEND_STATE)
+  {
+    state = LANDED_STATE;
+    if (TEST)
+      Serial.println("The system has detected the impact, the system has landed.");
   }
 }
 
@@ -459,12 +491,25 @@ void ascendToDescend()
 // }
 
 // detects fall based on the value of accelerometer, runs synchronously with IMU
-bool descendDetected()
+// bool descendDetected()
+// {
+//   float a[3] = {accX, accY, accZ};
+//   float pAcc = sqrt(pow(a[0], 2) + pow(a[1], 2) + pow(a[2], 2));
+//   if (pAcc < hitGValue && vspeed < math.abs(0.5) && gnssVspeed < math.abs(0.5) && state == DESCEND_STATE) // just a precaution.
+//   {
+//     return true;
+//   }
+//   return false;
+// }
+
+bool detectImpact()
 {
   float a[3] = {accX, accY, accZ};
   float pAcc = sqrt(pow(a[0], 2) + pow(a[1], 2) + pow(a[2], 2));
-  if (pAcc < hitGValue && vspeed < math.abs(0.5) && gnssVspeed < math.abs(0.5) && state == DESCEND_STATE) // just a precaution.
+  if (pAcc > 4.0 && state == DESCEND_STATE) // just a precaution.
   {
+    if (TEST)
+      Serial.println("Impact detected");
     return true;
   }
   return false;
@@ -476,7 +521,8 @@ bool detectFall()
   float pAcc = sqrt(pow(a[0], 2) + pow(a[1], 2) + pow(a[2], 2));
   if (pAcc < fallGValue && state == ASCEND_STATE) // just a precaution.
   {
-
+    if (TEST)
+      Serial.println("Fall detected");
     return true;
   }
   return false;
@@ -505,6 +551,8 @@ void sensorsInit()
       Serial.println("GNSS module detected!");
     while (myGNSS.getSIV() < 4)
     {
+      if (TEST)
+        Serial.println("Waiting for GNSS signal... Number of sattelites is: " + (String)(myGNSS.getSIV()));
       makeNoise(1, new int[1]{100}, new int[1]{0}, 1); // notify that GNSS was not detected (waiting for signal to be retrieved
       delay(1000);
     }
@@ -564,7 +612,19 @@ void sensorsInit()
     makeNoise(2, new int[2]{1000, 1000}, new int[2]{1000, 1000}, 1); // notify that GNSS was not detected
     sensorsVerified = false;                                         // sensor was not validated, thus all system is stuck in bootup
   }
-
+  if (SD.begin(BUILTIN_SDCARD))
+  {
+    if (TEST)
+      Serial.println("SD card detected!");
+    makeNoise(3, new int[3]{500, 100, 100}, new int[3]{100, 100, 1000}, 1); // notify that sd card was detected
+  }
+  else
+  {
+    if (TEST)
+      Serial.println("Unable to detect SD card!");
+    makeNoise(2, new int[2]{1000, 1000}, new int[2]{1000, 1000}, 1); // notify that sd card was not detected
+    // sensorsVerified = false;                                         // sensor was not validated, thus all system is stuck in bootup
+  }
   // initialize timestamp for a datafile. We assume gnss gets signal to retrieve time based on UTC format.
   if (TEST)
     Serial.println("Getting a timestamp for datafile to write data...");
@@ -573,15 +633,22 @@ void sensorsInit()
   if (TEST)
     Serial.print("timestamp generated: " + timestamp);
 
-  char *name = (fileName + timestamp + fileExtension).c_str(); // assemble data to generate full filename
-  telemetryFile = SD.open(name, FILE_WRITE);                   // todo change name of the file based on the timestamp
+  name = (fileName + (String)(timestamp) + fileExtension); // assemble data to generate full filename
+  if (TEST)
+    Serial.println(name);
+  telemetryFile = SD.open(name.c_str(), FILE_WRITE); // todo change name of the file based on the timestamp
+  if (TEST)
+    Serial.println("File opened");
   // set up servo
-  servo.setServoControl(SERVO_PIN);
-  controlServo(0.0, 1.0); // set the servo to the middle position
-  servo.setKp(1.0);
+  if (isServoPresent)
+  {
+    servo.setServoControl(SERVO_PIN);
+    controlServo(0.0, 1.0); // set the servo to the middle position
+    servo.setKp(1.0);
+  }
 }
 
-void generateTimeStamp() // kept as void, no mean to test the data came through. Assumed the sensor initialized and got connection. Will be called within data retrieve thread, to reduce load on i2c bus 1.
+String generateTimeStamp() // kept as void, no mean to test the data came through. Assumed the sensor initialized and got connection. Will be called within data retrieve thread, to reduce load on i2c bus 1.
 {
 
   char buffer[20];
@@ -608,6 +675,7 @@ void generateTimeStamp() // kept as void, no mean to test the data came through.
   timestamp += "-";
   dtostrf(second, 1, 0, buffer);
   timestamp += buffer;
+  return timestamp;
 }
 
 //---------------filters------------
@@ -620,6 +688,10 @@ float exponentialAveraging(float a, float b, float k1)
 // the function is called to make a sound with specific length and timing
 void makeNoise(int numberOfBeeps, int lengths[], int timings[], int numberOfRepeats)
 {
+  if (onMute)
+  {
+    return;
+  }
   for (int i = 0; i < numberOfRepeats; i++)
   {
     for (int j = 0; j < numberOfBeeps; j++)
